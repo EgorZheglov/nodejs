@@ -18,7 +18,7 @@ module.exports = async function login(name, password) {
       name: name,
     },
     'notVeryGoodSecret',
-    { expiresIn: '30s' }
+    { expiresIn: '600s' }
   );
 
   return accessToken;

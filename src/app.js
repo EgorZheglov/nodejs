@@ -1,4 +1,5 @@
 const express = require('express');
+const employee = require('../src/routes/employee');
 const cookieParser = require('cookie-parser');
 const login = require('../src/routes/login');
 const auth = require('./middlewares/auth');
@@ -14,10 +15,16 @@ app.use(cookieParser());
 app.use(signup);
 app.use(login);
 
-app.use(auth);
+//app.use(auth); //auth middleware
+
+app.use(employee);
 
 app.use((req, res) => {
-  res.status(404).send({ message: 'Not Found ' });
+  res.status(404).send({ message: 'route not found' });
+});
+
+app.use((req, res) => {
+  res.status(404).send({ message: 'Not Found' });
 });
 
 app.listen(PORT, () => {
