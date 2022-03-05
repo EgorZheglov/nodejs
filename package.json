@@ -21,6 +21,7 @@
   "dependencies": {
     "await-to-js": "^3.0.0",
     "axios": "^0.26.0",
+    "celebrate": "^15.0.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
