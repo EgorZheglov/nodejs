@@ -8,7 +8,7 @@ router.post('/signup', async (req, res, next) => {
   const user = await createUser(name, password);
 
   if (user) {
-    res.status(200).send('registred');
+    res.status(200).send({ message: 'registred' });
   } else {
     // throw error next or smth
   }

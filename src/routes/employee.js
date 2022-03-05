@@ -46,12 +46,14 @@ router.get('/employee/:id', async (req, res, next) => {
 router.delete('/employee/:id', async (req, res, next) => {
   const id = req.params.id;
 
+  console.log(id);
   const [err, employee] = await to(deleteEmployee(id));
 
   if (employee) {
     res.status(201).send('deleted');
   } else {
     // throw error next or smth
+    res.status(404).send();
   }
 });
 

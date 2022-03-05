@@ -13,18 +13,12 @@ async function createEmployee(data) {
 }
 
 async function deleteEmployee(id) {
-  const [err, employee] = await to(
-    Promise.resolve(employees.find((el) => el.id === id))
-  );
-
-  if (employee) {
-    employees = [...employees.filter((el) => el.id !== employee.id)];
-    console.log(employees)
+  if (employees.find((el) => el.id === id)) {
+    employees.filter((el) => el.id !== id);
+    return Promise.resolve('deleted');
+  } else {
+    throw 'not Found';
   }
-
-  if (err) throw err;
-
-  return 'deleted';
 }
 
 async function findEmployes() {
