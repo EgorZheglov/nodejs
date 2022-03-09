@@ -15,7 +15,7 @@ describe('global test for all routes', () => {
 
   const testEmployee = {
     name: 'test',
-    birthdate: 'test',
+    birthdate: 1984,
     rank: 'test',
     salary: 'test',
   };
