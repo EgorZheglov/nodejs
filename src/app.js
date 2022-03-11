@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const login = require('../src/routes/login');
 const auth = require('./middlewares/auth');
 const signup = require('./routes/signup');
-const errHandler = require('../src/common/express-err-handler');
 
 let server;
 const app = express();

@@ -22,6 +22,8 @@ router.post('/employee', async (req, res, next) => {
 });
 
 router.get('/employee', async (req, res, next) => {
+  const { name = '', limit = 10 } = req.query;
+
   const employees = await findEmployes();
 
   if (employees) {

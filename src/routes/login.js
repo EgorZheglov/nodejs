@@ -1,8 +1,9 @@
 const express = require('express');
+const { validateSignupLogin } = require('../validation/request-validation');
 const login = require('../common/login');
 const router = express.Router();
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', validateSignupLogin, async (req, res, next) => {
   const { name, password } = req.body;
 
   const token = await login(name, password);
