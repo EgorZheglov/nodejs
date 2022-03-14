@@ -1,16 +1,15 @@
 const db = require('../database/db');
+const bcrypt = require('bcryptjs');
 const { to } = require('await-to-js');
 
 async function createUser(name, password) {
-  const user = {
-    name: name,
-    password: password,
-  };
   const [err, result] = await to(
-    db.query('insert into agency.users ( name, password ) values ($1, $2)', [
-      name,
-      password,
-    ])
+    bcrypt.hash(password, 7).then((hash) => {
+      db.query('insert into agency.users ( name, password ) values ($1, $2)', [
+        name,
+        hash,
+      ]);
+    })
   );
 
   if (err) {

@@ -1,15 +1,18 @@
 const { findByName } = require('../controllers/user');
 const { to } = require('await-to-js');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 module.exports = async function login(name, password) {
   const [err, response] = await to(findByName(name));
 
-  if (err) {
+  if (err || !response) {
     throw err;
   }
 
-  if (response.password !== password) {
+  const match = await bcrypt.compare(password, response.password);
+
+  if (!match) {
     throw 'wrong password';
   }
 

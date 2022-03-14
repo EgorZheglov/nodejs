@@ -75,7 +75,9 @@ describe('global test for all routes', () => {
       authorizationHeaders
     );
 
-    employeeId = responseFromGetAll.data[0].id;
+    employeeId = responseFromGetAll.data.find(
+      (el) => el.name === testEmployee.name
+    ).id;
     expect(responseFromGetAll.status).toBe(200);
     expect(responseFromGetAll.data.length).toBeGreaterThan(0);
     expect(

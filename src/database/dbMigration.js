@@ -5,7 +5,7 @@ module.exports = async () => {
   await db.query(`create table if not exists agency.users (
       id serial primary key, 
       name varchar(50) not null, 
-      password varchar(50) not null
+      password varchar not null
       );`);
   await db.query(`create table if not exists agency.employee (
       id serial primary key, 

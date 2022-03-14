@@ -1,11 +1,8 @@
-const employees = require('../database/employees');
 const db = require('../database/db');
 const { to } = require('await-to-js');
-const { v4: uuid } = require('uuid');
 
 async function createEmployee(data) {
   const { name, birthdate, rank, salary } = data;
-  const id = uuid();
 
   const [err, result] = await to(
     db.query(
@@ -34,6 +31,7 @@ async function deleteEmployee(id) {
 }
 
 async function findEmployes() {
+  //TODO: filters
   const [err, result] = await to(db.query('select * from agency.employee'));
 
   if (err) {
