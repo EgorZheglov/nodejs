@@ -1,23 +1,35 @@
-const users = require('../database/users');
+const db = require('../database/db');
+const { to } = require('await-to-js');
 
 async function createUser(name, password) {
   const user = {
     name: name,
     password: password,
   };
-  await Promise.resolve(users.push(user));
-  //TODO: check error, etc
+  const [err, result] = await to(
+    db.query('insert into agency.users ( name, password ) values ($1, $2)', [
+      name,
+      password,
+    ])
+  );
 
-  return user;
+  if (err) {
+    throw err;
+  }
+
+  return result;
 }
 
 async function findByName(name) {
-  const user = await Promise.resolve(users.find((user) => user.name === name));
-  //TODO: check error, etc
+  const [err, result] = await to(
+    db.query('select * from agency.users where name = $1', [name])
+  );
 
-  return user;
+  if (err || !result.rows || result.rows.length === 0) {
+    throw err;
+  }
+
+  return result.rows[0];
 }
-
-
 
 module.exports = { createUser, findByName };

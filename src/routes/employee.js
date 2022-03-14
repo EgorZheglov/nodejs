@@ -12,12 +12,13 @@ const router = express.Router();
 router.post('/employee', async (req, res, next) => {
   const data = req.body;
 
-  const employee = await createEmployee(data);
+  const [err, employee] = await to(createEmployee(data));
 
   if (employee) {
-    res.status(200).send(employee);
+    res.status(200).send('created');
   } else {
     // throw error next or smth
+    res.status(500).send('server error');
   }
 });
 
@@ -48,7 +49,6 @@ router.get('/employee/:id', async (req, res, next) => {
 router.delete('/employee/:id', async (req, res, next) => {
   const id = req.params.id;
 
-  console.log(id);
   const [err, employee] = await to(deleteEmployee(id));
 
   if (employee) {

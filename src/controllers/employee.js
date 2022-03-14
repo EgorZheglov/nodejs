@@ -1,40 +1,56 @@
 const employees = require('../database/employees');
+const db = require('../database/db');
 const { to } = require('await-to-js');
 const { v4: uuid } = require('uuid');
-const e = require('express');
 
 async function createEmployee(data) {
   const { name, birthdate, rank, salary } = data;
   const id = uuid();
 
-  await Promise.resolve(employees.push({ name, birthdate, rank, salary, id }));
+  const [err, result] = await to(
+    db.query(
+      'insert into agency.employee ( name, birthdate, rank, salary ) values ($1, $2, $3, $4)',
+      [name, birthdate, rank, salary]
+    )
+  );
 
-  return { name, birthdate, rank, salary, id };
+  if (err) {
+    throw 'user not created';
+  }
+
+  return 'created';
 }
 
 async function deleteEmployee(id) {
-  if (employees.find((el) => el.id === id)) {
-    employees.filter((el) => el.id !== id);
-    return Promise.resolve('deleted');
-  } else {
-    throw 'not Found';
+  const [err, result] = await to(
+    db.query('delete from agency.employee where id = $1', [id])
+  );
+
+  if (err) {
+    throw err;
   }
+
+  return 'deleted';
 }
 
 async function findEmployes() {
-  await Promise.resolve({});
+  const [err, result] = await to(db.query('select * from agency.employee'));
 
-  return employees;
+  if (err) {
+    throw err;
+  }
+
+  return result.rows;
 }
 
 async function findEmployeeById(id) {
-  const [err, employee] = await to(
-    Promise.resolve(employees.find((el) => el.id === id))
+  const [err, result] = await to(
+    db.query('select * from agency.employee where id = $1', [id])
   );
 
   if (err) throw err;
 
-  return employee;
+  return result.rows[0];
 }
 
 module.exports = {

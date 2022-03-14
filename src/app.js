@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const login = require('../src/routes/login');
 const auth = require('./middlewares/auth');
 const signup = require('./routes/signup');
+const db = require('../src/database/db');
+const dbCheckSchema = require('../src/database/dbMigration');
 
 let server;
 const app = express();
@@ -12,7 +14,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(signup);
 app.use(login);
 
@@ -31,9 +32,12 @@ module.exports = {
     server = app.listen(PORT, () => {
       console.log(`Server is listening on ${PORT} port`);
     });
+    await db.connect();
+    await dbCheckSchema();
   },
   stop: async () => {
     //await disconnect from db
+    await db.disconnect();
     server.close();
   },
 };

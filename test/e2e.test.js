@@ -1,5 +1,6 @@
 const { start, stop } = require('../src/app');
 const axios = require('axios');
+const db = require('../src/database/db');
 //const { describe, beforeAll, afterAll, test } = require('jest');
 
 describe('global test for all routes', () => {
@@ -15,9 +16,9 @@ describe('global test for all routes', () => {
 
   const testEmployee = {
     name: 'test',
-    birthdate: 1984,
+    birthdate: '1984.06.06',
     rank: 'test',
-    salary: 'test',
+    salary: 1000,
   };
 
   beforeAll(async () => {
@@ -25,6 +26,9 @@ describe('global test for all routes', () => {
   });
 
   afterAll(async () => {
+    await db.query('DELETE FROM "agency"."users" WHERE name = $1', [
+      testUser.name,
+    ]);
     await stop();
   });
 
@@ -57,20 +61,12 @@ describe('global test for all routes', () => {
         name: testEmployee.name,
         birthdate: testEmployee.birthdate,
         rank: testEmployee.rank,
-        salary: testEmployee.rank,
+        salary: testEmployee.salary,
       },
       authorizationHeaders
     );
 
     expect(responseFromCreate.status).toBe(200);
-    expect(responseFromCreate.data.name).toEqual(testEmployee.name);
-    expect(responseFromCreate.data.birthdate).toEqual(testEmployee.birthdate);
-    expect(responseFromCreate.data.rank).toEqual(testEmployee.rank);
-    expect(responseFromCreate.data.salary).toEqual(testEmployee.salary);
-    expect(responseFromCreate.data.id).toBeTruthy();
-    expect(responseFromCreate.data.id.length).toBeGreaterThan(0);
-
-    employeeId = responseFromCreate.data.id;
   });
 
   test('Should get employees', async () => {
@@ -79,6 +75,7 @@ describe('global test for all routes', () => {
       authorizationHeaders
     );
 
+    employeeId = responseFromGetAll.data[0].id;
     expect(responseFromGetAll.status).toBe(200);
     expect(responseFromGetAll.data.length).toBeGreaterThan(0);
     expect(
